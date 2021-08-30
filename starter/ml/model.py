@@ -1,5 +1,6 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
-
+from sklearn.linear_model import SGDClassifier
+from Sklearn.model_selection import GridSearchCV
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
@@ -17,8 +18,9 @@ def train_model(X_train, y_train):
     model
         Trained machine learning model.
     """
-
-    pass
+    gs_clf=GridSearchCV(SGDClassifier(),param_grid={'max_iter':(500,1000)})
+    gs_clf.fit(X_train, y_train)
+    return gs_fit
 
 
 def compute_model_metrics(y, preds):
@@ -57,4 +59,5 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    pass
+    
+    return model.predict(X)
