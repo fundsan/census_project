@@ -6,12 +6,17 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from ml.data import process_data
 from ml.model import train_model
+
 import pickle
 import os
+import pytest
 # Add code to load in the data.
-data= pd.read_csv("data/census_cleaned.csv")
+
+
+data():
+    return pd.read_csv("data/census_cleaned.csv")
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
-train, test = train_test_split(data, test_size=0.20)
+train, test = train_test_split(data(), test_size=0.20)
 
 cat_features = [
     "workclass",
