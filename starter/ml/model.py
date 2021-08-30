@@ -1,6 +1,6 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.linear_model import SGDClassifier
-from Sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
