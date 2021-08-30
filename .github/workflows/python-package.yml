@@ -33,6 +33,11 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} # if you have/need it
         aws-region: us-east-1
+    - name: Add dvc
+      uses: iterative/setup-dvc@v1
+    - name: Run dvc pull
+      run: |
+        dvc pull
     - name: Install dependencies
       run: |
       
