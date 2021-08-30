@@ -20,7 +20,7 @@ def train_model(X_train, y_train):
     """
     gs_clf=GridSearchCV(SGDClassifier(),param_grid={'max_iter':(500,1000)})
     gs_clf.fit(X_train, y_train)
-    return gs_fit
+    return gs_clf
 
 
 def compute_model_metrics(y, preds):
