@@ -1,7 +1,11 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import GridSearchCV
-
+from aequitas.group import Group
+from aequitas.preprocessing import preprocess_input_df
+import aequitas as aq
+from aequitas.plotting import Plot
+import matplotlib.pyplot as plt
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """
@@ -44,6 +48,46 @@ def compute_model_metrics(y, preds):
     recall = recall_score(y, preds, zero_division=1)
     return precision, recall, fbeta
 
+def slice_inference(model,X, df, cat_feats, slice_feats='all'):
+    """ Run model inferences and return the predictions.
+
+    Inputs
+    ------
+    model : ???
+        Trained machine learning model.
+    X : np.array
+        Data used for prediction.
+    slice_feats : list-like, string
+        feature columns to get slices
+        
+    Returns
+    -------
+    preds : np.array
+        Predictions from the model.
+    """
+    
+    if slice_feats=='all':
+        slice_cols =list(X.columns)
+    else:
+        slice_cols = list(slice_feats)
+    df['label_value'] = df['salary'].values
+
+    df['score']=inference(model,X)
+    # double-check that categorical columns are of type 'string'
+    df[cat_feats] = df[cat_feats].astype(str)
+    
+    df, _ = preprocess_input_df(df[slice_feats+['score']+['label_value']])
+    g = Group()
+    xtab, _ = g.get_crosstabs(df)
+    df[slice_cols]
+    attr_xtab=xtab[xtab['attribute_name'].isin(slice_cols)]
+    
+    
+    aqp = Plot()
+    fig=aqp.plot_group_metric_all(attr_xtab, ncols=3,show_figure=False, min_group_size=.01)
+    plt.savefig('images/slice_performance_output.png')
+    return attr_xtab
+    
 
 def inference(model, X):
     """ Run model inferences and return the predictions.

@@ -41,3 +41,9 @@ model=train_model(X_train,y_train)
 # save the model to disk
 filename = os.path.join('model','model.pkl')
 pickle.dump(model, open(filename, 'wb'))
+
+filename = os.path.join('model','encoder.pkl')
+pickle.dump(encoder, open(filename, 'wb'))
+
+filename = os.path.join('model','labeler.pkl')
+pickle.dump(lb, open(filename, 'wb'))

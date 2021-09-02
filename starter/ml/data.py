@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 
 
@@ -65,6 +66,7 @@ def process_data(
         # Catch the case where y is None because we're doing inference.
         except AttributeError:
             pass
-
-    X = np.concatenate([X_continuous, X_categorical], axis=1)
+    con_col = list(X_continuous.columns)
+    cat_col_ohe = list(encoder.get_feature_names(categorical_features))
+    X = pd.DataFrame(np.concatenate([X_continuous, X_categorical], axis=1), columns=con_col+cat_col_ohe)
     return X, y, encoder, lb
