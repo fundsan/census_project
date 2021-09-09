@@ -13,5 +13,8 @@ data={'age': 39,
     'capital_loss':0,
     'hour_per_week':40,
     'native_country':'United-States'}
-r = requests.post('https://fast-river-63740.herokuapp.com/infer/',  json=data)
-print (r.json())
+r = requests.post('https://fast-river-63740.herokuapp.com/infer',  json=data)
+
+
+print(r.status_code)
+print(r.json())
