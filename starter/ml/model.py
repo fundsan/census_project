@@ -103,5 +103,15 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    
+    cat_features = [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native-country",
+    ]
+
     return model.predict(X)
