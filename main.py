@@ -40,6 +40,9 @@ class DataPoint(BaseModel):
 class PredictionOutput(BaseModel):
     prediction: Union[list,int] 
 
+@app.get("/jane")
+async def happy_birthday():
+    return {"Happy Birthday Message": "Happy Birthday! It's me Jake, I finally got this stupid thing working. I love you so much!"}
 @app.get("/")
 async def say_hello():
     return {"greeting": "Welcome to my model!"}
