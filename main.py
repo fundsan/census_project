@@ -43,6 +43,15 @@ class PredictionOutput(BaseModel):
 @app.get("/jane")
 async def happy_birthday():
     return {"Happy Birthday Message": "Happy Birthday! It's me Jake, I finally got this stupid thing working. I love you so much!"}
+@app.get("/love/{love_points}")
+async def love(love_points: int):
+    jakes_love_for_jane = 100000
+    janes_love_for_jake = love_points 
+    if janes_love_for_jake > jakes_love_for_jane:
+        return {"Message": "okay, you love me more."}
+    else:
+        return {"Message": "No, I love you more or equal."}
+
 @app.get("/")
 async def say_hello():
     return {"greeting": "Welcome to my model!"}
