@@ -1,6 +1,6 @@
 # Put the code for your API here.
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, PositiveInt
 import pandas as pd
 import pickle
 import os
@@ -22,20 +22,20 @@ loaded_encoder = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join(
 loaded_lb = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl'), 'rb'))
 
 class DataPoint(BaseModel):
-    age: int
-    workclass : str 
-    fnlgt : int
-    education : str
-    education_num :int
-    marital_status: str
-    occupation : str
-    relationship:str
-    race:str
-    sex:str
-    capital_gain:int
-    capital_loss:int
-    hour_per_week:int
-    native_country:str
+    age: int = Field(..., example=39)
+    workclass: str = Field(..., example = "State-gov")
+    fnlgt: int = Field(..., example = 77516)
+    education: str = Field(..., example = "Bachelors")
+    education_num: int = Field(..., alias = "education-num", example = 13)
+    marital_status: str = Field(..., alias = "marital-status", example = "Never-married")
+    occupation: str = Field(..., example = "Adm-clerical")
+    relationship: str = Field(..., example = "Not-in-family")
+    race: str = Field(..., example = "White")
+    sex: str = Field(..., example = "Male")
+    capital_gain: int = Field(..., alias = "capital-gain", example = 2147)
+    capital_loss: int = Field(..., alias = "capital-loss", example = 4)
+    hours_per_week: int = Field(..., alias = "hours-per-week", example = 40)
+    native_country: str = Field(..., alias = "native-country", example = "United-States")
 
 class PredictionOutput(BaseModel):
     prediction: Union[list,int] 

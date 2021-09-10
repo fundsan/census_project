@@ -11,7 +11,7 @@ def test_get_path():
     assert r.json() == {"greeting": "Welcome to my model!"}
 
 
-def test_post_infer():
+def test_post_infer_zero():
     r = client.post("/infer",json={'age': 39,
     'workclass': 'State-gov',
     'fnlgt' : 77516,
@@ -28,6 +28,23 @@ def test_post_infer():
     'native_country':'United-States'})
     assert r.status_code == 200
     assert r.json() == {'prediction':[0]}
+def test_post_infer_one():
+    r = client.post("/infer",json={'age': 43,
+    'workclass': 'self-emp-not-inc',
+    'fnlgt' : 292175,
+    'education' : 'Masters',
+    'education_num' :14,
+    'marital_status': 'Divorced',
+    'occupation' : 'Exec-managerial',
+    'relationship':'Unmarried',
+    'race':'White',
+    'sex':'Female',
+    'capital_gain':0,
+    'capital_loss':0,
+    'hour_per_week':45,
+    'native_country':'United-States'})
+    assert r.status_code == 200
+    assert r.json() == {'prediction':[1]}
 
 
 def test_get_malformed():
