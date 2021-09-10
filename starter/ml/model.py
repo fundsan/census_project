@@ -85,7 +85,7 @@ def slice_inference(model,X, df, cat_feats, slice_feats='all'):
     
     aqp = Plot()
     fig=aqp.plot_group_metric_all(attr_xtab, ncols=3,show_figure=False, min_group_size=.01)
-    plt.savefig('images/slice_performance_output.png')
+    plt.savefig(os.path.abspath(os.getcwd())+'/images/slice_performance_output.png')
     return attr_xtab
     
 

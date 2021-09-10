@@ -40,9 +40,9 @@ async def say_hello():
 async def infer_datapoint(datapoint: DataPoint,response_model=PredictionOutput):
     X= pd.DataFrame(datapoint.dict(by_alias=True),index=range(1))
     X.columns = [x.replace('_','-') for x in X.columns]
-    loaded_model = pickle.load(open(os.path.join('model','model.pkl'), 'rb'))
-    loaded_encoder = pickle.load(open(os.path.join('model','encoder.pkl'), 'rb'))
-    loaded_lb = pickle.load(open(os.path.join('model','labeler.pkl'), 'rb'))
+    loaded_model = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','model.pkl'), 'rb'))
+    loaded_encoder = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','encoder.pkl'), 'rb'))
+    loaded_lb = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl'), 'rb'))
     cat_features = [
     "workclass",
     "education",
