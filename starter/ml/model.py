@@ -6,6 +6,7 @@ from aequitas.preprocessing import preprocess_input_df
 import aequitas as aq
 from aequitas.plotting import Plot
 import matplotlib.pyplot as plt
+import os
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """
