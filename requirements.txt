@@ -5,3 +5,7 @@ fastapi
 pydantic
 requests
 aequitas
+uvicorn
+gunicorn
+joblib
+flake8
