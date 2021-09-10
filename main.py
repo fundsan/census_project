@@ -10,9 +10,9 @@ from starter.ml.data import process_data
 
 
 app = FastAPI()
-loaded_model = pickle.load(open(os.path.join('model','model.pkl'), 'rb'))
-loaded_encoder = pickle.load(open(os.path.join('model','encoder.pkl'), 'rb'))
-loaded_lb = pickle.load(open(os.path.join('model','labeler.pkl'), 'rb'))
+loaded_model = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','model.pkl'), 'rb'))
+loaded_encoder = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','encoder.pkl'), 'rb'))
+loaded_lb = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl'), 'rb'))
 
 class DataPoint(BaseModel):
     age: int
