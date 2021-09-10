@@ -9,4 +9,4 @@ uvicorn
 gunicorn
 joblib
 flake8
-dvc
+dvc[s3]
