@@ -1,5 +1,5 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
-from sklearn.linear_model import SGDClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from aequitas.group import Group
 from aequitas.preprocessing import preprocess_input_df
@@ -23,7 +23,15 @@ def train_model(X_train, y_train):
     model
         Trained machine learning model.
     """
-    gs_clf=GridSearchCV(SGDClassifier(),param_grid={'max_iter':(500,1000)})
+    n_estimators = [100, 300, 500,1000]
+    max_depth = [5, 8, 15, 25]
+    min_samples_split = [2, 5]
+    min_samples_leaf = [1, 5] 
+
+    hyperF = dict(n_estimators = n_estimators, max_depth = max_depth,  
+              min_samples_split = min_samples_split, 
+             min_samples_leaf = min_samples_leaf)
+    gs_clf=GridSearchCV(RandomForestClassifier(),param_grid=hyperF)
     gs_clf.fit(X_train, y_train)
     return gs_clf
 
