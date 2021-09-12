@@ -22,13 +22,10 @@ For additional information see the Model Card paper: https://arxiv.org/pdf/1810.
 – Preprocessing: categorical data is put into one hot encoding
 ## Evaluation Data
 – Datasets:20% of https://archive.ics.uci.edu/ml/datasets/census+income 
-– Motivation:
-– Preprocessing:
+– Preprocessing:categorical data is put into one hot encoding
 
 ## Metrics
-– Model performance measures
-– Decision thresholds
-– Variation approache
+Test results: Precision: 0.8849765258215962 Recall: 0.706875 Fbeta: 0.7859624739402363
 
 ## Ethical Considerations
 – Unitary results

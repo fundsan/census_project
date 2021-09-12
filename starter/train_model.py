@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 # Add the necessary imports for the starter code.
 import pandas as pd
 from ml.data import process_data
-from ml.model import train_model
+from ml.model import train_model,inference,compute_model_metrics
 
 import pickle
 import os
@@ -16,34 +16,68 @@ import pytest
 def data():
     return pd.read_csv("data/census_cleaned.csv")
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
-train, test = train_test_split(data(), test_size=0.20)
+def train_and_test():
+    train, test = train_test_split(data(), test_size=0.20)
+    
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+    X_train, y_train, encoder, lb = process_data(
+        train, categorical_features=cat_features, label="salary", training=True
+    )
+    
+    # Proces the test data with the process_data function.
+    X_test, y_test, encoder, lb = process_data(
+        test, categorical_features=cat_features, label="salary", training=False,encoder=encoder, lb=lb
+    )
+    # Train and save a model.
+    model=train_model(X_train,y_train)
+    # save the model to disk
+    filename = os.path.abspath(os.getcwd())+'/'+os.path.join('model','model.pkl')
+    pickle.dump(model, open(filename, 'wb'))
+    
+    filename = os.path.abspath(os.getcwd())+'/'+os.path.join('model','encoder.pkl')
+    pickle.dump(encoder, open(filename, 'wb'))
+    
+    filename = os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl')
+    pickle.dump(lb, open(filename, 'wb'))
+    
+    y_test_hat = inference(model, X)
+    precision, recall, fbeta=compute_model_metrics(y_test,y_test_hat)
+    print("Test results: Precision: {} Recall: {} Fbeta: {}".format(precision, recall, fbeta))
+    return model, encoder, lb
+def just_do_test():
+    train, test = train_test_split(data(), test_size=0.20)
+    
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+    loaded_model = pickle.load(open(os.path.join('model','model.pkl'), 'rb'))
+    loaded_encoder = pickle.load(open(os.path.join('model','encoder.pkl'), 'rb'))
+    loaded_lb = pickle.load(open(os.path.join('model','labeler.pkl'), 'rb'))
+    
+    # Proces the test data with the process_data function.
+    X_test, y_test, _, _ = process_data(
+        test, categorical_features=cat_features, label="salary", training=False,encoder=loaded_encoder, lb=loaded_lb
+    )
 
-cat_features = [
-    "workclass",
-    "education",
-    "marital-status",
-    "occupation",
-    "relationship",
-    "race",
-    "sex",
-    "native-country",
-]
-X_train, y_train, encoder, lb = process_data(
-    train, categorical_features=cat_features, label="salary", training=True
-)
+    y_test_hat = inference(model, X)
+    precision, recall, fbeta=compute_model_metrics(y_test,y_test_hat)
+    print("Test results: Precision: {} Recall: {} Fbeta: {}".format(precision, recall, fbeta))
 
-# Proces the test data with the process_data function.
-X_test, y_test, encoder, lb = process_data(
-    test, categorical_features=cat_features, label="salary", training=False,encoder=encoder, lb=lb
-)
-# Train and save a model.
-model=train_model(X_train,y_train)
-# save the model to disk
-filename = os.path.abspath(os.getcwd())+'/'+os.path.join('model','model.pkl')
-pickle.dump(model, open(filename, 'wb'))
-
-filename = os.path.abspath(os.getcwd())+'/'+os.path.join('model','encoder.pkl')
-pickle.dump(encoder, open(filename, 'wb'))
-
-filename = os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl')
-pickle.dump(lb, open(filename, 'wb'))
+    
+train_and_test()
