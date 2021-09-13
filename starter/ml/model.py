@@ -1,7 +1,5 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
-
 from sklearn.model_selection import GridSearchCV
 from aequitas.group import Group
 from aequitas.preprocessing import preprocess_input_df
@@ -59,7 +57,7 @@ def compute_model_metrics(y, preds):
     recall = recall_score(y, preds, zero_division=1)
     return precision, recall, fbeta
 
-def slice_inference(model,X, df,cat_feats, slice_feats='all'):
+def slice_inference(model,X, df,y,cat_feats, slice_feats='all', test=False):
     """ Run model inferences and return the predictions.
 
     Inputs
@@ -78,10 +76,11 @@ def slice_inference(model,X, df,cat_feats, slice_feats='all'):
     """
     
     if slice_feats=='all':
-        slice_cols =list(data.columns)
+        slice_cols =list(df.columns)
     else:
         slice_cols = list(slice_feats)
     df['label_value'] = df['salary'].values
+    
     df= df.drop('salary',axis=1)
     slice_cols.remove('salary')
     df['score']=inference(model,X)
@@ -94,25 +93,32 @@ def slice_inference(model,X, df,cat_feats, slice_feats='all'):
     df[slice_cols]
     attr_xtab=xtab[xtab['attribute_name'].isin(slice_cols)]
     
-    
-    #aqp = Plot()
-    #fig=aqp.plot_group_metric_all(attr_xtab, ncols=3,show_figure=False)
-    #plt.savefig(os.path.abspath(os.getcwd())+'/images/slice_performance_output.png')
-    f = open(os.path.join('..','slice_output.txt'),'w')
-    f.write("Slice Metrics\n")
-    f.write("------------------------\n")
-    for attribute_name in attr_xtab['attribute_name'].unique():
-        f.write("Slices for attribute '{}':\n".format(attribute_name))
-        for attribute_value in attr_xtab[attr_xtab['attribute_name']==attribute_name]['attribute_value']:
+    if not test:
+        #aqp = Plot()
+        #fig=aqp.plot_group_metric_all(attr_xtab, ncols=3,show_figure=False)
+        #plt.savefig(os.path.abspath(os.getcwd())+'/images/slice_performance_output.png')
+        f = open(os.path.join('..','slice_output.txt'),'w')
+        f.write("Slice Metrics\n")
+        f.write("------------------------\n")
+        for attribute_name in attr_xtab['attribute_name'].unique():
+            f.write("Slices for attribute '{}':\n".format(attribute_name))
+            for attribute_value in attr_xtab[attr_xtab['attribute_name']==attribute_name]['attribute_value']:
             
-            slice_data = df[df[attribute_name]==attribute_value]
-            precision, recall, fbeta = compute_model_metrics(y[slice_data.index],slice_data['score'].values)
-            f.write("{}: precsion={} recall={} fbeta={}\n".format(attribute_value,precision, recall, fbeta))
+                slice_data = df[df[attribute_name]==attribute_value]
+                precision, recall, fbeta = compute_model_metrics(y[slice_data.index],slice_data['score'].values)
+                f.write("{}: precsion={} recall={} fbeta={}\n".format(attribute_value,precision, recall, fbeta))
             
-        f.write("------------------------\n") 
-    f.close()
+            f.write("------------------------\n") 
+        f.close()
+     
+    else:
 
-        
+        for attribute_name in attr_xtab['attribute_name'].unique():
+            for attribute_value in attr_xtab[attr_xtab['attribute_name']==attribute_name]['attribute_value']:
+            
+                slice_data = df[df[attribute_name]==attribute_value]
+                precision, recall, fbeta = compute_model_metrics(y[slice_data.index],slice_data['score'].values)
+            
         
     return attr_xtab
     

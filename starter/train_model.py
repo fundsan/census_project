@@ -4,8 +4,8 @@ from sklearn.model_selection import train_test_split
 
 # Add the necessary imports for the starter code.
 import pandas as pd
-from ml.data import process_data
-from ml.model import train_model,inference,compute_model_metrics
+from starter.ml.data import process_data
+from starter.ml.model import train_model,inference,compute_model_metrics
 
 import pickle
 import os
@@ -53,8 +53,8 @@ def train_and_test():
     precision, recall, fbeta=compute_model_metrics(y_test,y_test_hat)
     print("Test results: Precision: {} Recall: {} Fbeta: {}".format(precision, recall, fbeta))
     return model, encoder, lb
-def just_do_test():
-    train, test = train_test_split(data(), test_size=0.20)
+def just_do_tst():
+    _, test = train_test_split(data(), test_size=0.20)
     
     cat_features = [
         "workclass",
@@ -75,9 +75,11 @@ def just_do_test():
         test, categorical_features=cat_features, label="salary", training=False,encoder=loaded_encoder, lb=loaded_lb
     )
 
-    y_test_hat = inference(model, X)
+    y_test_hat = inference(loaded_model, X_test)
     precision, recall, fbeta=compute_model_metrics(y_test,y_test_hat)
     print("Test results: Precision: {} Recall: {} Fbeta: {}".format(precision, recall, fbeta))
+    return precision, recall, fbeta
 
-    
-train_and_test()
+if __name__ == "__main__":
+     
+    train_and_test()
