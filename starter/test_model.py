@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import pickle
 import os
 from sklearn.ensemble import RandomForestClassifier
@@ -39,6 +40,9 @@ def test_testing():
     loaded_encoder = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','encoder.pkl'), 'rb'))
     loaded_labeler = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl'), 'rb'))
     precision, recall, fbeta = just_do_tst()
+    assert type(precision) == np.float64
+    assert type(recall) == np.float64
+    assert type(fbeta) == np.float64
     
     
     
@@ -67,5 +71,7 @@ def test_slice_inference():
     X_test, y_test, _, _ = process_data(
         test, categorical_features=cat_features, label="salary", training=False,encoder=loaded_encoder, lb=loaded_lb
     )
-    slice_inference(loaded_model,X_test.copy().reset_index(drop = True), test.copy().reset_index(drop = True),y_test,cat_features, slice_feats='all',test=True)
+    attr_xtab = slice_inference(loaded_model,X_test.copy().reset_index(drop = True), test.copy().reset_index(drop = True),y_test,cat_features, slice_feats='all',test=True)
+    for feat in cat_features:
+        assert (feat in attr_xtab['attribute_name'].unique().tolist()) == True
     
