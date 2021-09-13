@@ -49,7 +49,7 @@ def train_and_test():
     filename = os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl')
     pickle.dump(lb, open(filename, 'wb'))
     
-    y_test_hat = inference(model, X)
+    y_test_hat = inference(model, X_test)
     precision, recall, fbeta=compute_model_metrics(y_test,y_test_hat)
     print("Test results: Precision: {} Recall: {} Fbeta: {}".format(precision, recall, fbeta))
     return model, encoder, lb
