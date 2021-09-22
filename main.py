@@ -38,14 +38,14 @@ class DataPoint(BaseModel):
     native_country: str = Field(..., alias = "native-country", example = "United-States")
 
 class PredictionOutput(BaseModel):
-    prediction: Union[list,int]
+    prediction: Union[list,int] = Field(..., example=0)
 
 
 @app.get("/")
 async def say_hello():
     return {"greeting": "Welcome to my model!"}
 @app.post("/infer")
-async def infer_datapoint(datapoint: DataPoint,response_model: PredictionOutput):
+async def infer_datapoint(datapoint: DataPoint,response_model= PredictionOutput):
     
     X= pd.DataFrame(datapoint.dict(by_alias=True),index=range(1))
     X.columns = [x.replace('_','-') for x in X.columns]
