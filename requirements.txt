@@ -6,7 +6,6 @@ pydantic
 requests
 aequitas
 uvicorn
-gunicorn
 joblib
 flake8
 dvc[s3]
