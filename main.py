@@ -16,7 +16,7 @@ if "DYNO" in os.environ and os.path.isdir(".dvc"):
         exit("dvc pull failed")
     os.system("rm -r .dvc .apt/usr/lib/dvc")
     
-app = FastAPI(docs_url='/docs')
+app = FastAPI()
 loaded_model = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','model.pkl'), 'rb'))
 loaded_encoder = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','encoder.pkl'), 'rb'))
 loaded_lb = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl'), 'rb'))
@@ -38,7 +38,7 @@ class DataPoint(BaseModel):
     native_country: str = Field(..., alias = "native-country", example = "United-States")
 
 class PredictionOutput(BaseModel):
-    prediction: Union[list,int]
+    prediction: int = Field(..., example=0)
 
 
 @app.get("/")
@@ -64,4 +64,4 @@ async def infer_datapoint(datapoint: DataPoint,response_model= PredictionOutput)
     ]
     X,y,enc, lb = process_data(X, categorical_features=cat_features, label=None, training=False, encoder=loaded_encoder, lb=loaded_lb)
 
-    return {'prediction':inference(loaded_model, X).tolist()}
+    return {'prediction':inference(loaded_model, X).tolist()[0]}
