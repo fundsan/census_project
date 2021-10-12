@@ -53,13 +53,13 @@ class DataPoint(BaseModel):
                 "capital_gain": 2147,
                 "capital_loss": 4,
                 "hours_per_week": 40,
-                "native_country":"United-States":
+                "native_country":"United-States"
                 
             }
         }
 
 class PredictionOutput(BaseModel):
-    prediction: int = Field(..., example=0)
+    prediction: int 
 
 
 @app.get("/")
@@ -85,4 +85,4 @@ async def infer_datapoint(datapoint: DataPoint,response_model= PredictionOutput)
     ]
     X,y,enc, lb = process_data(X, categorical_features=cat_features, label=None, training=False, encoder=loaded_encoder, lb=loaded_lb)
 
-    return {'prediction':inference(loaded_model, X).tolist()[0]}
+    return {'prediction':int(inference(loaded_model, X).tolist()[0])}
