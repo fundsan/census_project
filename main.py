@@ -48,7 +48,8 @@ class DataPoint(BaseModel):
                 "marital_status": "Never-married",
                 "occupation": "Adm-clerical",
                 "relationship": "Not-in-family",
-                "sex": "White",
+                "race": "White",
+                'sex':"Male"
                 "capital_gain": 2147,
                 "capital_loss": 4,
                 "hours_per_week": 40,
