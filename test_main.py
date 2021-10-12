@@ -27,7 +27,7 @@ def test_post_infer_zero():
     'hours-per-week':40,
     'native-country':'United-States'})
     assert r.status_code == 200
-    assert r.json() == {'prediction':[0]}
+    assert r.json() == {'prediction':0}
 def test_post_infer_one():
     r = client.post("/infer",json={'age': 43,
     'workclass': 'Private',
@@ -45,4 +45,4 @@ def test_post_infer_one():
     'native-country':'United-States'})
     
     assert r.status_code == 200
-    assert r.json() == {'prediction':[1]}
+    assert r.json() == {'prediction':1}
