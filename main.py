@@ -49,7 +49,7 @@ class DataPoint(BaseModel):
                 "occupation": "Adm-clerical",
                 "relationship": "Not-in-family",
                 "race": "White",
-                'sex':"Male"
+                'sex':"Male",
                 "capital_gain": 2147,
                 "capital_loss": 4,
                 "hours_per_week": 40,
