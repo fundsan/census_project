@@ -38,7 +38,7 @@ class DataPoint(BaseModel):
     native_country: str = Field(..., alias = "native-country", example = "United-States")
 
 class PredictionOutput(BaseModel):
-    prediction: Union[list,int] = Field(..., example=0)
+    prediction: int = Field(..., example=0)
 
 
 @app.get("/")
@@ -64,4 +64,4 @@ async def infer_datapoint(datapoint: DataPoint,response_model= PredictionOutput)
     ]
     X,y,enc, lb = process_data(X, categorical_features=cat_features, label=None, training=False, encoder=loaded_encoder, lb=loaded_lb)
 
-    return {'prediction':inference(loaded_model, X).tolist()}
+    return {'prediction':inference(loaded_model, X).tolist()[0]}
