@@ -22,23 +22,44 @@ loaded_encoder = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join(
 loaded_lb = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl'), 'rb'))
 
 class DataPoint(BaseModel):
-    age: int = Field(..., example=39)
-    workclass: str = Field(..., example = "State-gov")
-    fnlgt: int = Field(..., example = 77516)
-    education: str = Field(..., example = "Bachelors")
-    education_num: int = Field(..., alias = "education-num", example = 13)
-    marital_status: str = Field(..., alias = "marital-status", example = "Never-married")
-    occupation: str = Field(..., example = "Adm-clerical")
-    relationship: str = Field(..., example = "Not-in-family")
-    race: str = Field(..., example = "White")
-    sex: str = Field(..., example = "Male")
-    capital_gain: int = Field(..., alias = "capital-gain", example = 2147)
-    capital_loss: int = Field(..., alias = "capital-loss", example = 4)
-    hours_per_week: int = Field(..., alias = "hours-per-week", example = 40)
-    native_country: str = Field(..., alias = "native-country", example = "United-States")
+    age: int 
+    workclass: str 
+    fnlgt: int 
+    education: str 
+    education_num: int = Field(..., alias = "education-num")
+    marital_status: str = Field(..., alias = "marital-status")
+    occupation: str 
+    relationship: str
+    race: str 
+    sex: str 
+    capital_gain: int = Field(..., alias = "capital-gain")
+    capital_loss: int = Field(..., alias = "capital-loss")
+    hours_per_week: int = Field(..., alias = "hours-per-week")
+    native_country: str = Field(..., alias = "native-country")
+    
+    class Config:
+        schema_extra = {
+            "example": {
+                "age": 39,
+                "workclass": "State-gov",
+                "fnlgt": 77516,
+                "education": "Bachelors",
+                "education_num": 13,
+                "marital_status": "Never-married",
+                "occupation": "Adm-clerical",
+                "relationship": "Not-in-family",
+                "race": "White",
+                'sex':"Male",
+                "capital_gain": 2147,
+                "capital_loss": 4,
+                "hours_per_week": 40,
+                "native_country":"United-States"
+                
+            }
+        }
 
 class PredictionOutput(BaseModel):
-    prediction: int = Field(..., example=0)
+    prediction: int 
 
 
 @app.get("/")
@@ -64,4 +85,4 @@ async def infer_datapoint(datapoint: DataPoint,response_model: PredictionOutput)
     ]
     X,y,enc, lb = process_data(X, categorical_features=cat_features, label=None, training=False, encoder=loaded_encoder, lb=loaded_lb)
 
-    return {'prediction':inference(loaded_model, X).tolist()[0]}
+    return {'prediction':int(inference(loaded_model, X).tolist()[0])}
