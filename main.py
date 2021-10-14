@@ -44,16 +44,16 @@ class DataPoint(BaseModel):
                 "workclass": "State-gov",
                 "fnlgt": 77516,
                 "education": "Bachelors",
-                "education_num": 13,
-                "marital_status": "Never-married",
+                "education-num": 13,
+                "marital-status": "Never-married",
                 "occupation": "Adm-clerical",
                 "relationship": "Not-in-family",
                 "race": "White",
                 'sex':"Male",
-                "capital_gain": 2147,
-                "capital_loss": 4,
-                "hours_per_week": 40,
-                "native_country":"United-States"
+                "capital-gain": 2147,
+                "capital-loss": 4,
+                "hours-per-week": 40,
+                "native-country":"United-States"
                 
             }
         }
@@ -65,11 +65,11 @@ class PredictionOutput(BaseModel):
 @app.get("/")
 async def say_hello():
     return {"greeting": "Welcome to my model!"}
-@app.post("/infer")
-async def infer_datapoint(datapoint: DataPoint,response_model: PredictionOutput):
+@app.post("/infer",response_model= PredictionOutput)
+async def infer_datapoint(datapoint: DataPoint):
     
     X= pd.DataFrame(datapoint.dict(by_alias=True),index=range(1))
-    X.columns = [x.replace('_','-') for x in X.columns]
+    #X.columns = [x.replace('_','-') for x in X.columns]
     loaded_model = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','model.pkl'), 'rb'))
     loaded_encoder = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','encoder.pkl'), 'rb'))
     loaded_lb = pickle.load(open(os.path.abspath(os.getcwd())+'/'+os.path.join('model','labeler.pkl'), 'rb'))
